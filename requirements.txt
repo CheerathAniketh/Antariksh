@@ -1,0 +1,21 @@
+# Astronomy/Physics Stack
+lightkurve
+astropy
+wotan
+batman-package
+
+# ML/DL Stack
+torch
+scikit-learn
+pandas
+numpy
+
+# API/Web Stack
+fastapi
+uvicorn
+pydantic
+python-dotenv
+
+# Data Visualization/Reporting
+matplotlib
+reportlab

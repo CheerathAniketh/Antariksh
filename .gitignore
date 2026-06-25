@@ -1,0 +1,10 @@
+# Python stuff
+__pycache__/
+*.py[cod]
+venv/
+
+# Data and Models (Keep these local!)
+data/raw/
+data/processed/
+models/weights/
+.env
