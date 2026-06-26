@@ -1,0 +1,4 @@
+TIC ID,Sector,Period (Days),Transit Depth,Physics SNR,AI Classification,AI Confidence %
+86396382,20,1.091,0.0131,3.0,Confirmed Planet (Transit),100.0
+261136679,1,1.568,0.0001,0.5,Eclipsing Binary (False Positive),77.27
+149603524,4,1.973,0.0003,0.33,Eclipsing Binary (False Positive),80.76
