@@ -1,0 +1,51 @@
+seed: 42
+
+data:
+  mission: TESS
+  product: SPOC 2-min light curves     # via Lightkurve/MAST
+  author: SPOC
+  exptime_s: 120
+  sector_rule: lowest_available_sector # one sector per target, frozen
+  flux_column: pdcsap_flux
+  quality_bitmask: default
+
+targets:
+  source: NASA Exoplanet Archive TOI table
+  positive_dispositions: [CP, KP]      # confirmed / known planet
+  negative_dispositions: [FP]          # false positive (EBs, blends, etc.)
+  excluded_dispositions: [PC, APC, FA] # unlabeled or ambiguous, never trained or evaluated on
+  max_per_class: 150
+  split:
+    method: stratified_by_label_grouped_by_tic
+    train_frac: 0.7
+    val_frac: 0.3
+
+preprocess:                            # order is fixed
+  steps: [quality_mask, drop_nan, median_normalize, flatten, clip_upper_outliers, stitch]
+  flatten: {method: savgol, window_length: 721, polyorder: 2}  # ~1 day at 2-min cadence
+  clip: {sigma_upper: 4.0, sigma_lower: null}                  # upper only, never clip transit dips
+
+bls:
+  period_min_d: 0.5
+  period_max_d: 15.0
+  durations_h: [0.5, 1, 1.5, 2, 3, 4, 6]
+  frequency_factor: 1.0
+  snr: "depth / (sigma_oot / sqrt(n_in_transit))"
+
+detection_success:
+  period_rel_tol: 0.01                 # |P_bls - P_ref| / P_ref
+  count_harmonics_separately: true     # 0.5x, 2x are reported as harmonic misses, not hits
+
+classifier:
+  task: binary                         # planet vs non-planet for M1
+  baselines: [logistic_regression, gradient_boosting]
+  primary_metric: pr_auc
+  reported_metrics: [precision, recall, f1, pr_auc, confusion_matrix]
+  tuning: none_before_freeze           # fixed hyperparameters, no tuning on val
+
+parameter_error:
+  period:   "(P_fit - P_ref) / P_ref"
+  depth:    "(d_fit - d_ref) / d_ref"
+  duration: "(T_fit - T_ref) / T_ref"
+  reference: TOI table values (pl_orbper, pl_trandep, pl_trandurh)
+  report: [median_abs_rel_error, per_target_table]
