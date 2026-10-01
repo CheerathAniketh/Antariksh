@@ -1,9 +1,14 @@
 venv/
+.venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+*.egg-info/
 data/raw/*
 data/processed/*
 !data/**/.gitkeep
-.ipynb_checkpoints/
-.env*.egg-info/
 data/*.out
+.github/
+AGENTS.md
