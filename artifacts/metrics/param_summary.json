@@ -1,0 +1,62 @@
+{
+  "median_abs_rel_error": {
+    "val/bls_hits": {
+      "n": 34,
+      "n_fit_ok": 34,
+      "period_rel_err": 5.497474905487451e-05,
+      "depth_rel_err": 0.03505709642178283,
+      "duration_rel_err": 0.02344065538190017,
+      "bls_depth_rel_err": 0.07394575665402241,
+      "bls_duration_rel_err": 0.144040281149609
+    },
+    "val/all_planets": {
+      "n": 45,
+      "n_fit_ok": 45,
+      "period_rel_err": 8.58691273674353e-05,
+      "depth_rel_err": 0.056627113670528674,
+      "duration_rel_err": 0.0712658566200336,
+      "bls_depth_rel_err": 0.11038003121504845,
+      "bls_duration_rel_err": 0.19184001945187196
+    },
+    "train/bls_hits": {
+      "n": 83,
+      "n_fit_ok": 83,
+      "period_rel_err": 6.56676442340363e-05,
+      "depth_rel_err": 0.043362199430908493,
+      "duration_rel_err": 0.032819182578658346,
+      "bls_depth_rel_err": 0.13213216217462445,
+      "bls_duration_rel_err": 0.12401648557512175
+    },
+    "train/all_planets": {
+      "n": 104,
+      "n_fit_ok": 104,
+      "period_rel_err": 0.00012487817349409746,
+      "depth_rel_err": 0.0642778747302481,
+      "duration_rel_err": 0.04442425173875759,
+      "bls_depth_rel_err": 0.14144729155202906,
+      "bls_duration_rel_err": 0.14444649156388167
+    }
+  },
+  "bls_recovery_counts": {
+    "('train', 0)": {
+      "harmonic": 12,
+      "hit": 67,
+      "miss": 10
+    },
+    "('train', 1)": {
+      "harmonic": 1,
+      "hit": 83,
+      "miss": 20
+    },
+    "('val', 0)": {
+      "harmonic": 0,
+      "hit": 36,
+      "miss": 2
+    },
+    "('val', 1)": {
+      "harmonic": 0,
+      "hit": 34,
+      "miss": 11
+    }
+  }
+}

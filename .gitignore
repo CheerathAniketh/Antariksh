@@ -5,4 +5,5 @@ data/raw/*
 data/processed/*
 !data/**/.gitkeep
 .ipynb_checkpoints/
-.env
+.env*.egg-info/
+data/*.out

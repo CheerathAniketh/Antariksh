@@ -19,10 +19,12 @@ targets:
     method: stratified_by_label_grouped_by_tic
     train_frac: 0.7
     val_frac: 0.3
+  period_range_d: [0.5,15.0]
+  one_row_per_tic: true
 
 preprocess:                            # order is fixed
   steps: [quality_mask, drop_nan, median_normalize, flatten, clip_upper_outliers, stitch]
-  flatten: {method: savgol, window_length: 721, polyorder: 2}  # ~1 day at 2-min cadence
+  flatten: {method: savgol, window_length: 721, polyorder: 2, two_pass_mask_margin: 1.5}  # ~1 day at 2-min cadence
   clip: {sigma_upper: 4.0, sigma_lower: null}                  # upper only, never clip transit dips
 
 bls:
@@ -30,6 +32,7 @@ bls:
   period_max_d: 15.0
   durations_h: [0.5, 1, 1.5, 2, 3, 4, 6]
   frequency_factor: 1.0
+  max_duty_cycle: 0.1    # reject BLS peaks with duration/period above this (physical prior)
   snr: "depth / (sigma_oot / sqrt(n_in_transit))"
 
 detection_success:
