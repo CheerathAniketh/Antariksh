@@ -7,6 +7,7 @@ Reference parameters are TOI-catalogue values (SPOC fits to the same TESS data),
 
 - 300 frozen targets (150 planets: TOI dispositions CP/KP; 150 non-planets: FP), split 70/30 grouped by TIC, seed 42.
 - 24 targets have no SPOC 2-min light curve on MAST and are excluded from every metric. Evaluated: **276** targets.
+- The excluded targets are listed in `artifacts/metrics/excluded_no_data.csv`.
 - Train: 193 (104 planets, 89 non-planets). Validation: **83** (45 planets, 38 non-planets). Intervals are wide at this size.
 
 ## 1. BLS detection (period within 1% of the TOI period)

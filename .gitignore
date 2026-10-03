@@ -12,3 +12,5 @@ data/processed/*
 data/*.out
 .github/
 AGENTS.md
+data/*.out
+nohup.out
