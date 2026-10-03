@@ -27,6 +27,8 @@ Each step reads the previous step's output. `data/` is gitignored, so a fresh cl
     python backend/scripts/04_train.py              # baselines -> artifacts/metrics, artifacts/models
     python backend/scripts/05_evaluate.py           # parameter errors vs TOI -> artifacts/metrics
     python backend/scripts/06_make_figures.py       # 4-panel figures -> artifacts/figures/val
+    python backend/scripts/07_label_shuffle_posthoc.py   # post-hoc leakage diagnostic (not part of the frozen contract)
+    python backend/scripts/08_api_smoke.py          # API smoke receipt -> artifacts/receipts/api_smoke.json
 
 Targets with no SPOC 2-min light curve are skipped and logged in `data/raw/download_log.csv`.
 
@@ -37,7 +39,7 @@ Targets with no SPOC 2-min light curve are skipped and logged in `data/raw/downl
     curl -s -X POST localhost:8000/analyze -H "Content-Type: application/json" \
       -d '{"tic_id": 393831507, "include_plot": true}'
 
-Request: `tic_id` (downloaded and cached if missing), or `time` + `flux` (+ `flux_err`). Response: detection flag, BLS signal with SNR, batman fit with uncertainties, classifier probability, vetting flags, optional base64 PNG of the 4-panel plot.
+Request: `tic_id` (downloaded and cached if missing), or `time` + `flux` (+ `flux_err`). Response: detection flag, BLS signal with SNR, batman fit with uncertainties, uncalibrated classifier score (`score_planet`, not a probability), vetting flags, optional base64 PNG of the 4-panel plot.
 
 ## Tests
 

@@ -1,0 +1,26 @@
+{
+  "status": "post-hoc diagnostic; not preregistered; not used for tuning; frozen contract unchanged",
+  "n_permutations": 200,
+  "seed": 42,
+  "tic_ids_in_both_splits": 0,
+  "models": {
+    "logreg": {
+      "observed_val_pr_auc_true_labels": 0.7401497157143843,
+      "val_prevalence_chance_level": 0.5421686746987951,
+      "shuffled_val_pr_auc_mean": 0.5721040644556843,
+      "shuffled_val_pr_auc_p95": 0.7680230880774062,
+      "shuffled_val_pr_auc_max": 0.8158508023523586,
+      "empirical_p_ge_observed": 0.08955223880597014,
+      "shuffled_train_in_sample_pr_auc_mean": 0.6759937685149237
+    },
+    "grad_boost": {
+      "observed_val_pr_auc_true_labels": 0.8545030221140254,
+      "val_prevalence_chance_level": 0.5421686746987951,
+      "shuffled_val_pr_auc_mean": 0.5564221507157622,
+      "shuffled_val_pr_auc_p95": 0.6852810298601061,
+      "shuffled_val_pr_auc_max": 0.7572143198826374,
+      "empirical_p_ge_observed": 0.004975124378109453,
+      "shuffled_train_in_sample_pr_auc_mean": 0.9945734242749813
+    }
+  }
+}

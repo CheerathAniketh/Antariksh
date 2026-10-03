@@ -28,5 +28,5 @@ def test_analyze_uploaded_synthetic_light_curve():
     assert j["detected"]
     assert abs(j["bls"]["period_d"] - 3.7) / 3.7 < 0.01
     assert j["fit"]["ok"] and j["fit"]["depth_err_ppm"] > 0
-    assert 0.0 <= j["classification"]["prob_planet"] <= 1.0
+    assert 0.0 <= j["classification"]["score_planet"] <= 1.0
     assert j["plot_png_base64"]

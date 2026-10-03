@@ -72,8 +72,8 @@ def analyze_lightcurve(lc) -> dict:
                 "reduced_chi2": _num(fit.get("fit_rchi2"))},
         "classification": {
             "label": "planet_candidate" if p_gb >= 0.5 else "non_planet",
-            "prob_planet": p_gb, "prob_planet_logreg": p_lr,
-            "note": "Binary baseline (planet vs non-planet: EB, blend, systematics). Probabilities are uncalibrated.",
+            "score_planet": p_gb, "score_planet_logreg": p_lr,
+            "note": "Binary baseline (planet vs non-planet: EB, blend, systematics). Scores are uncalibrated model outputs in [0, 1], not probabilities; they are not validated as likelihoods.",
         },
         "flags": _flags(f, r.snr, r.n_transits),
         "_curve": c, "_bls": r, "_fit": fit,

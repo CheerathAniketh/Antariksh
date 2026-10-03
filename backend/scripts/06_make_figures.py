@@ -34,7 +34,7 @@ def main():
         ref = t.loc[tic]
         title = (f"TIC{tic} [{tag}] label={ref.label} ({ref.disposition}) ref P={ref.period_d:.3f} d | "
                  f"BLS P={res['bls']['period_d']:.3f} d SNR={res['bls']['snr']:.1f} | "
-                 f"P(planet)={res['classification']['prob_planet']:.2f}")
+                 f"uncalibrated score={res['classification']['score_planet']:.2f}")
         fig = make_figure(res["_curve"], res["_bls"], res["_fit"], title)
         fig.savefig(out / f"TIC{tic}_{tag}.png", dpi=110, bbox_inches="tight")
         plt.close(fig)

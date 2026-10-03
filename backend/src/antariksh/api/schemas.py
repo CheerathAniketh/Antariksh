@@ -45,8 +45,8 @@ class FitResult(BaseModel):
 
 class Classification(BaseModel):
     label: str
-    prob_planet: float
-    prob_planet_logreg: float
+    score_planet: float
+    score_planet_logreg: float
     note: str
 
 

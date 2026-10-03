@@ -1,0 +1,33 @@
+{
+  "run_utc": "2026-10-03T15:19:57+00:00",
+  "git_commit": "086665d1019e16400a0aa07727cf784fc264c7e6",
+  "working_tree_dirty": true,
+  "all_passed": true,
+  "checks": {
+    "real_target_TIC393831507": {
+      "passed": true,
+      "http": 200,
+      "detected": true,
+      "bls_period_d": 4.860553850352781,
+      "fit_ok": true,
+      "score_planet": 0.7838772072966734
+    },
+    "injected_transit": {
+      "passed": true,
+      "http": 200,
+      "detected": true,
+      "bls_period_d": 3.7009878998100656,
+      "injected_period_d": 3.7
+    },
+    "noise_only_not_detected": {
+      "passed": true,
+      "http": 200,
+      "detected": false,
+      "bls_snr": 5.197100327088929
+    },
+    "empty_request_422": {
+      "passed": true,
+      "http": 422
+    }
+  }
+}

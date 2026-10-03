@@ -6,7 +6,7 @@ Reference parameters are TOI-catalogue values (SPOC fits to the same TESS data),
 ## Data
 
 - 300 frozen targets (150 planets: TOI dispositions CP/KP; 150 non-planets: FP), split 70/30 grouped by TIC, seed 42.
-- 24 targets have no SPOC 2-min light curve on MAST and are excluded from every metric. Evaluated: **276** targets.
+- 24 targets have no SPOC 2-min light curve on MAST and are excluded from every metric. Evaluated: **276** targets. This is an availability and selection limitation: results describe stars that have 2-min SPOC data, not all 300 targets.
 - The excluded targets are listed in `artifacts/metrics/excluded_no_data.csv`.
 - Train: 193 (104 planets, 89 non-planets). Validation: **83** (45 planets, 38 non-planets). Intervals are wide at this size.
 
@@ -19,7 +19,7 @@ Reference parameters are TOI-catalogue values (SPOC fits to the same TESS data),
 | train | non-planet | 89 | 67 | 12 | 10 | 75% |
 | val | non-planet | 38 | 36 | 0 | 2 | 95% |
 
-Harmonics are 0.5x, 2x, 1/3x and 3x of the reference and are not counted as hits. All misses are listed in `artifacts/failures/bls_misses.csv`.
+Harmonics are 0.5x, 2x, 1/3x and 3x of the reference and are not counted as hits. The frozen contract text names only 0.5x and 2x; the wider set is in the implementation and was documented afterwards (`CONTRACT.md` changelog, 2026-10-03). The 1% hit rule is unchanged. All misses are listed in `artifacts/failures/bls_misses.csv`.
 
 ## 2. Classification (planet vs non-planet, validation, n=83)
 
@@ -31,9 +31,9 @@ Fixed hyperparameters, threshold 0.5, 95% bootstrap CIs (1000 resamples).
 | gradient boosting | 0.85 [0.74, 0.94] | 0.71 | 0.80 | 0.75 | [[23,15],[9,36]] |
 | BLS SNR alone (reference) | 0.72 | | | | |
 
-- The intervals overlap heavily. Gradient boosting looks better than SNR alone, but 83 stars cannot establish that. Logistic regression is barely above the SNR-only reference.
+- The intervals overlap heavily. Gradient boosting has the higher point estimate, but 83 stars cannot establish that it beats logistic regression (the predeclared baseline) or BLS SNR alone. Logistic regression is barely above the SNR-only reference.
 - Gradient boosting overfits: train PR-AUC 0.999 vs 0.85 on validation. Settings were fixed before evaluation and not tuned.
-- Gradient boosting is the primary model in the API. That choice was made after seeing validation PR-AUC (logged in `CONTRACT.md`).
+- Gradient boosting is the primary model in the API. That choice was made after seeing validation PR-AUC (logged in `CONTRACT.md`), so its higher PR-AUC is a post-selection observation and not a predeclared win. Logistic regression remains the predeclared baseline.
 - Labels are the TOI dispositions, and features come from whatever BLS found. Planets whose BLS detection failed (section 1) are still scored, so this evaluates the whole pipeline and not just the classifier.
 - Misclassifications: `artifacts/failures/misclassified_val.csv`.
 
@@ -68,13 +68,17 @@ Median absolute relative error after the batman fit. "BLS box" is the raw BLS es
 - **Binary classifier.** The problem statement asks for transits, eclipses, blends and others. This pipeline separates planet from non-planet; vetting flags (odd/even, secondary eclipse, low SNR, few transits) are fixed rules, not a trained multi-class model. No blend classification.
 - **Light-curve only.** No centroid or pixel-level vetting.
 - **SNR assumes white noise**, so correlated noise inflates it (spurious detections reach SNR 27-34). Red-noise-aware significance is future work.
-- **Probabilities are uncalibrated.**
+- **Scores are uncalibrated.** The API returns `score_planet` (and `score_planet_logreg`), raw model outputs in [0, 1] that are not validated as probabilities. No calibration study was done.
 - **Small sample.** 83 validation stars, one sector per target, 276 of 300 evaluated.
 - **One signal per star.** Multi-planet systems: BLS reports the strongest signal only.
 - **Contract timing.** The contract text was committed in cb48b94 (2026-09-30) before any download or training. The frozen target list (`configs/targets.csv`) was empty at that commit and is committed with the results, and the pre-training amendments are logged in `CONTRACT.md`; `git diff cb48b94 -- configs/contract.yaml` shows them.
 - **Correction logged in `CONTRACT.md` (2026-10-01):** the API originally computed features from a curve flattened with the pass-1 ephemeris, while training used the final one. This affected 21 of 276 targets and is fixed; stored and API probabilities now match.
 
-## 6. Not done
+## 6. Post-hoc diagnostics
+
+- A label-shuffle leakage check was run after these results were seen. It is not preregistered and was not used to tune anything. Result and interpretation: `EVIDENCE.md` and `artifacts/metrics/label_shuffle_posthoc.json`.
+
+## 7. Not done
 
 - CNN-LSTM comparison (optional in the brief).
 - Hyperparameter tuning, probability calibration, bigger training set, frontend.
