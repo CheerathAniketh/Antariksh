@@ -21,8 +21,8 @@ export interface FitResult {
 
 export interface Classification {
   label: string
-  prob_planet: number
-  prob_planet_logreg: number
+  score_planet: number
+  score_planet_logreg: number
   note: string
 }
 

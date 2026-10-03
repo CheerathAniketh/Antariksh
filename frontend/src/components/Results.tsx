@@ -18,7 +18,7 @@ function Stat({ label, value, err, unit }: { label: string; value: string; err?:
 
 export default function Results({ res }: { res: AnalyzeResponse }) {
   const { bls, fit, classification: c } = res
-  const pct = Math.round(c.prob_planet * 100)
+  const pct = Math.round(c.score_planet * 100)
 
   return (
     <motion.section
@@ -50,7 +50,7 @@ export default function Results({ res }: { res: AnalyzeResponse }) {
             <div className="h-full bg-cyan-glow" style={{ width: `${pct}%` }} />
           </div>
           <p className="mt-2 font-mono text-xs text-dim">
-            logistic regression: {Math.round(c.prob_planet_logreg * 100)}%
+            logistic regression: {Math.round(c.score_planet_logreg * 100)}%
           </p>
         </div>
 
