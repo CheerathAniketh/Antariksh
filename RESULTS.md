@@ -81,4 +81,5 @@ Median absolute relative error after the batman fit. "BLS box" is the raw BLS es
 ## 7. Not done
 
 - CNN-LSTM comparison (optional in the brief).
-- Hyperparameter tuning, probability calibration, bigger training set, frontend.
+- Hyperparameter tuning, probability calibration, bigger training set.
+- A basic UI now exists in `frontend/` (added after this report); it is not part of the evaluated results.
