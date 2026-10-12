@@ -51,6 +51,11 @@ export default function FluxTrace({ orbit }: { orbit: OrbitParams }) {
         else ctx.lineTo(px, y)
       }
       ctx.stroke()
+      const yNow = yOf(fluxAt(now, orbit))
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(w - 3, yNow, 3.5, 0, Math.PI * 2)
+      ctx.fill()
       ctx.shadowBlur = 0
 
       if (!reduceMotion) raf = requestAnimationFrame(draw)

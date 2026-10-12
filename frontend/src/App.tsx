@@ -46,7 +46,7 @@ export default function App() {
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-void/60 via-transparent to-void" />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-between px-6 py-10">
+        <div className="pointer-events-none relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-between px-6 py-10">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.35em] text-cyan-glow">TESS · transit photometry</p>
             <h1 className="mt-4 text-5xl font-bold tracking-[0.12em] text-ink sm:text-7xl lg:text-8xl">ANTARIKSH</h1>
