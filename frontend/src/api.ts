@@ -47,6 +47,7 @@ export async function analyzeTic(ticId: number): Promise<AnalyzeResponse> {
     try {
       const j = await r.json()
       if (typeof j.detail === 'string') msg = j.detail
+      else if (Array.isArray(j.detail)) msg = j.detail.map((d: { msg: string }) => d.msg).join('; ')
     } catch {
       // keep the default message
     }

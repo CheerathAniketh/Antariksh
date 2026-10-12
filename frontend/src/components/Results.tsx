@@ -18,7 +18,7 @@ function Stat({ label, value, err, unit }: { label: string; value: string; err?:
 
 export default function Results({ res }: { res: AnalyzeResponse }) {
   const { bls, fit, classification: c } = res
-  const pct = Math.round(c.score_planet * 100)
+  const pct = Math.min(100, Math.max(0, c.score_planet * 100))
 
   return (
     <motion.section
@@ -43,14 +43,14 @@ export default function Results({ res }: { res: AnalyzeResponse }) {
 
         <div className="mt-5">
           <div className="flex items-baseline justify-between font-mono text-xs text-dim">
-            <span>P(planet), uncalibrated</span>
-            <span className="text-ink">{pct}%</span>
+            <span>Model score (uncalibrated, not a probability)</span>
+            <span className="text-ink">{c.score_planet.toFixed(2)}</span>
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded bg-white/10">
             <div className="h-full bg-cyan-glow" style={{ width: `${pct}%` }} />
           </div>
           <p className="mt-2 font-mono text-xs text-dim">
-            logistic regression: {Math.round(c.score_planet_logreg * 100)}%
+            logistic regression baseline: {c.score_planet_logreg.toFixed(2)}
           </p>
         </div>
 

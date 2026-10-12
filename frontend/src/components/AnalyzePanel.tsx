@@ -15,7 +15,8 @@ export default function AnalyzePanel({ onResult }: { onResult: (r: AnalyzeRespon
   const [error, setError] = useState<string | null>(null)
 
   async function run(value: string) {
-    const id = Number.parseInt(value, 10)
+    if (busy) return
+    const id = /^\d+$/.test(value.trim()) ? Number(value.trim()) : NaN
     if (!Number.isFinite(id) || id <= 0) {
       setError('Enter a numeric TIC ID.')
       return
@@ -25,7 +26,12 @@ export default function AnalyzePanel({ onResult }: { onResult: (r: AnalyzeRespon
     try {
       onResult(await analyzeTic(id))
     } catch (e) {
-      setError(e instanceof Error ? e.message : String(e))
+      const msg = e instanceof Error ? e.message : String(e)
+      setError(
+        msg.startsWith('500') || msg.includes('Failed to fetch')
+          ? 'Could not reach the API. Is uvicorn running on port 8000?'
+          : msg,
+      )
     } finally {
       setBusy(false)
     }
@@ -40,7 +46,7 @@ export default function AnalyzePanel({ onResult }: { onResult: (r: AnalyzeRespon
           onChange={(e) => setTic(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && run(tic)}
           inputMode="numeric"
-          placeholder="TIC ID"
+          placeholder="TIC ID" aria-label="TIC ID"
           className="flex-1 rounded-lg border border-white/10 bg-black/40 px-4 py-3 font-mono text-lg text-ink outline-none focus:border-cyan-glow"
         />
         <button

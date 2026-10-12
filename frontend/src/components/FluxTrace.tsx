@@ -11,6 +11,7 @@ export default function FluxTrace({ orbit }: { orbit: OrbitParams }) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
     let raf = 0
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const draw = () => {
       const dpr = window.devicePixelRatio || 1
@@ -52,7 +53,7 @@ export default function FluxTrace({ orbit }: { orbit: OrbitParams }) {
       ctx.stroke()
       ctx.shadowBlur = 0
 
-      raf = requestAnimationFrame(draw)
+      if (!reduceMotion) raf = requestAnimationFrame(draw)
     }
 
     draw()

@@ -8,14 +8,16 @@ import type { AnalyzeResponse } from './api'
 
 const Hero3D = lazy(() => import('./components/Hero3D'))
 
-function orbitFromResult(r: AnalyzeResponse): OrbitParams | null {
+type OrbitSource = 'demo' | 'fit' | 'bls'
+
+function orbitFromResult(r: AnalyzeResponse): { orbit: OrbitParams; source: OrbitSource } | null {
   const f = r.fit
   if (f.ok && f.period_d != null && f.duration_h != null && f.depth_ppm != null && f.depth_ppm > 0) {
-    return orbitFromSignal(f.period_d, f.duration_h, f.depth_ppm)
+    return { orbit: orbitFromSignal(f.period_d, f.duration_h, f.depth_ppm), source: 'fit' }
   }
   const b = r.bls
-  if (b.period_d != null && b.duration_h != null && b.depth_ppm != null && b.depth_ppm > 0) {
-    return orbitFromSignal(b.period_d, b.duration_h, b.depth_ppm)
+  if (r.detected && b.period_d != null && b.duration_h != null && b.depth_ppm != null && b.depth_ppm > 0) {
+    return { orbit: orbitFromSignal(b.period_d, b.duration_h, b.depth_ppm), source: 'bls' }
   }
   return null
 }
@@ -23,11 +25,13 @@ function orbitFromResult(r: AnalyzeResponse): OrbitParams | null {
 export default function App() {
   const [orbit, setOrbit] = useState<OrbitParams>(DEMO_ORBIT)
   const [result, setResult] = useState<AnalyzeResponse | null>(null)
+  const [source, setSource] = useState<OrbitSource>('demo')
 
   function handleResult(r: AnalyzeResponse) {
     setResult(r)
     const o = orbitFromResult(r)
-    if (o) setOrbit(o)
+    setOrbit(o ? o.orbit : DEMO_ORBIT)
+    setSource(o ? o.source : 'demo')
   }
 
   const depthPpm = Math.round(orbit.rp * orbit.rp * 1e6)
@@ -45,7 +49,7 @@ export default function App() {
         <div className="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-between px-6 py-10">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.35em] text-cyan-glow">TESS · transit photometry</p>
-            <h1 className="mt-4 text-6xl font-bold tracking-[0.12em] text-ink sm:text-8xl">ANTARIKSH</h1>
+            <h1 className="mt-4 text-5xl font-bold tracking-[0.12em] text-ink sm:text-7xl lg:text-8xl">ANTARIKSH</h1>
             <p className="mt-5 max-w-xl text-lg text-dim">
               Find tiny periodic dips in noisy starlight, classify them, and measure period, depth and duration
               with uncertainties.
@@ -60,14 +64,18 @@ export default function App() {
 
           <div className="glass pointer-events-auto max-w-2xl p-4">
             <div className="flex items-center justify-between font-mono text-xs text-dim">
-              <span>model light curve · {result ? `TIC ${result.tic_id}` : 'demo orbit'}</span>
+              <span>
+                {source === 'demo'
+                  ? (result ? `TIC ${result.tic_id} · no signal to draw, showing demo orbit` : 'demo orbit')
+                  : `TIC ${result?.tic_id} · from ${source === 'fit' ? 'transit fit' : 'BLS box (no fit)'}`}
+              </span>
               <span>depth {depthPpm} ppm</span>
             </div>
             <FluxTrace orbit={orbit} />
             <p className="mt-1 text-[11px] text-dim">
               {result
-                ? 'Drawn from the fitted period, duration and depth (circular orbit, central transit). Planet size is exaggerated when too small to see.'
-                : 'Run an analysis and the orbit and curve follow the fitted parameters.'}
+                ? 'Illustrative model (circular orbit, central transit), not the real light curve. Planet size is exaggerated when too small to see.'
+                : 'Run an analysis and the orbit and curve follow the measured parameters.'}
             </p>
           </div>
         </div>
